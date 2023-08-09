@@ -1,25 +1,6 @@
-import pandas as pd
+import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-import tensorflow as tf
-from keras.layers import Flatten
-from keras.models import Sequential, Model, load_model
-from keras.callbacks import EarlyStopping, Callback
-from keras.layers import (
-    Dense,
-    Dropout,
-    Activation,
-    Flatten,
-    Lambda,
-    ELU,
-    GlobalAveragePooling2D,
-)
-from keras.layers import Flatten, MaxPooling2D, Conv2D
-from sklearn.utils import shuffle
-from keras.utils import to_categorical
-import time, cv2, glob
-from sklearn.metrics import accuracy_score
+from keras.models import load_model
 
 global loadedModel
 size = 300
@@ -28,15 +9,11 @@ size = 300
 # Resize the frame to required dimensions and predict
 def predict_pothole(currentFrame):
     currentFrame = cv2.resize(currentFrame, (size, size))
-    print("Resized frame shape:", currentFrame.shape)  # Debug print
-    currentFrame = currentFrame.reshape(1, size, size, 1).astype("float")
-    currentFrame = currentFrame / 255
+    currentFrame = currentFrame.reshape(1, size, size, 1).astype("float") / 255.0
     prob = loadedModel.predict(currentFrame)
-    max_prob = max(prob[0])
-    predicted_class = np.argmax(prob[0])  # Get the predicted class index
-    if max_prob > 0.90:
-        return predicted_class, max_prob
-    return "none", 0
+    max_prob = np.max(prob)
+    predicted_class = np.argmax(prob)
+    return predicted_class, max_prob
 
 
 if __name__ == "__main__":
@@ -53,18 +30,31 @@ if __name__ == "__main__":
             print("Error: Unable to load image from the provided path.")
         else:
             pothole, prob = predict_pothole(input_frame)
-            print("Prediction:", pothole, "with probability:", prob)
+            if pothole == 1:
+                print("Potholes detected with probability:", prob)
+            else:
+                print("No potholes detected with probability", prob)
     elif input_mode == "2":
-        # ... (rest of the video feed code)
+        video_option = input(
+            "Choose video input option (1 for webcam feed, 2 for video path): "
+        )
 
-        camera = cv2.VideoCapture(0)
+        if video_option == "1":
+            camera = cv2.VideoCapture(0)
+        elif video_option == "2":
+            video_source = input("Enter video file path: ")
+            camera = cv2.VideoCapture(video_source)
+            if not camera.isOpened():
+                print("Error: Unable to open video file.")
+                exit()
         show_pred = False
         while True:
             (grabbed, frame) = camera.read()
+            if not grabbed:
+                break
+
             frame = cv2.flip(frame, 1)
-
             clone = frame.copy()
-
             grayClone = cv2.cvtColor(clone, cv2.COLOR_BGR2GRAY)
 
             pothole, prob = predict_pothole(grayClone)
@@ -94,4 +84,3 @@ if __name__ == "__main__":
 
         camera.release()
         cv2.destroyAllWindows()
-        # for testing accuracy
