@@ -175,7 +175,7 @@ X_train = X_train / 255
 X_test = X_test / 255
 
 model.compile("adam", "categorical_crossentropy", ["accuracy"])
-history = model.fit(X_train, y_train, epochs=50, validation_split=0.1)
+history = model.fit(X_train, y_train, epochs=100, validation_split=0.1)
 
 print("")
 
