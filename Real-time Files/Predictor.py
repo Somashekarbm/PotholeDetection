@@ -13,6 +13,7 @@ global size
 # OG size = 300
 size = 300
 model = Sequential()
+//change the path to the latest_full_model.h5 here
 model = load_model(
     r"C:\Users\Somashekar\OneDrive\Desktop\ideation\pothole-detection-system-using-convolution-neural-networks\Real-time Files\full_model.h5"
 )
