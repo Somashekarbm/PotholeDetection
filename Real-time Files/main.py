@@ -42,6 +42,50 @@ def create_transfer_model(input_shape, num_classes):
 
 model = create_transfer_model(inputShape, num_classes)
 
+#try this architecture-
+# from keras.models import Sequential
+# from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Activation, Dropout, BatchNormalization
+
+# def improved_pothole_detection_model(input_shape):
+#     model = Sequential()
+
+#     # 1st convolutional layer
+#     model.add(Conv2D(64, (5, 5), padding='same', input_shape=input_shape))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     # 2nd convolutional layer
+#     model.add(Conv2D(64, (5, 5), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     # 3rd convolutional layer
+#     model.add(Conv2D(32, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+#     model.add(Dropout(0.25))
+
+#     # 4th convolutional layer
+#     model.add(Conv2D(16, (3, 3), padding='same'))
+#     model.add(Activation('relu'))
+#     model.add(MaxPooling2D(pool_size=(2, 2)))
+
+#     # Flattening the layers
+#     model.add(Flatten())
+
+#     # Fully connected layers
+#     model.add(Dense(256))
+#     model.add(Activation('relu'))
+#     model.add(Dropout(0.5))
+
+#     # Output layer
+#     model.add(Dense(2))
+#     model.add(Activation('softmax'))
+
+#     return model
+# Assuming input image size is 64x64 and 3 channels (RGB)
+# input_shape = (64, 64, 3)
+# model = improved_pothole_detection_model(input_shape)
 
 def kerasModel4():
     model = Sequential()
